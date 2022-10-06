@@ -92,7 +92,7 @@ class imageprocessing:
             
         except: 
             
-            self.area_line_follower = 1000
+            self.area_line_follower = 10
             self.h_l = 0
             self.s_l = 0
             self.v_l = 0
@@ -108,7 +108,7 @@ class imageprocessing:
             self.e2 = 0
             self.d2 = 0
             
-            self.area_landing = 10000
+            self.area_landing = 0
             self.h_l_r = 156
             self.s_l_r = 43
             self.v_l_r = 46
@@ -322,11 +322,11 @@ class imageprocessing:
                 y = (x1_2-B)/A
                 if y < y1_2 :
                     self.status2 *= -1
-                    
 #==============================================================================
         
         else :
             self.model = "nothing"
+            
         image = cv2.resize(image, (480, 360))
         cv2.putText(image, '%d'%self.status2, (400, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow('line_follower show', image)
@@ -633,13 +633,13 @@ class imageprocessing:
         # cv2.imshow('mask', result)
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY) 
         # cv2.imshow('gray', gray)
-        median = cv2.medianBlur(gray,self.mid_k)
+        median = cv2.medianBlur(gray,19)
         # cv2.imshow('median', median)
-        gaussian = cv2.GaussianBlur(median, (self.Gaus_k, self.Gaus_k), 0)
+        gaussian = cv2.GaussianBlur(median, (19, 19), 0)
         # cv2.imshow('gaussian',gaussian)
         ret, binary = cv2.threshold(gaussian, 0, 255, cv2.THRESH_OTSU)
         # cv2.imshow('binary', binary2)
-        kernel = np.ones((self.kernel,self.kernel), np.uint8)
+        kernel = np.ones((self.kernel_size[self.kernel],self.kernel_size[self.kernel]), np.uint8)
         erode = cv2.erode(binary , kernel, iterations =  self.e1)
         dilate = cv2.dilate(erode, kernel, iterations = self.d1) 
         erode2 = cv2.erode(dilate , kernel, iterations = self.e2)
@@ -701,13 +701,13 @@ class imageprocessing:
         # cv2.imshow('mask', result)
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY) 
         # cv2.imshow('gray', gray)
-        median = cv2.medianBlur(gray,self.mid_k)
+        median = cv2.medianBlur(gray,19)
         # cv2.imshow('median', median)
-        gaussian = cv2.GaussianBlur(median, (self.Gaus_k, self.Gaus_k), 0)
+        gaussian = cv2.GaussianBlur(median, (19, 19), 0)
         # cv2.imshow('gaussian',gaussian)
         ret, binary = cv2.threshold(gaussian, 0, 255, cv2.THRESH_OTSU)
         # cv2.imshow('binary', binary2)
-        kernel = np.ones((self.kernel,self.kernel), np.uint8)
+        kernel = np.ones((self.kernel_size[self.kernel],self.kernel_size[self.kernel]), np.uint8)
         erode = cv2.erode(binary , kernel, iterations =  self.e1)
         dilate = cv2.dilate(erode, kernel, iterations = self.d1) 
         erode2 = cv2.erode(dilate , kernel, iterations = self.e2)
@@ -770,13 +770,13 @@ class imageprocessing:
         # cv2.imshow('mask', result)
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY) 
         # cv2.imshow('gray', gray)
-        median = cv2.medianBlur(gray,self.mid_k)
+        median = cv2.medianBlur(gray,19)
         # cv2.imshow('median', median)
-        gaussian = cv2.GaussianBlur(median, (self.Gaus_k, self.Gaus_k), 0)
+        gaussian = cv2.GaussianBlur(median, (19, 19), 0)
         # cv2.imshow('gaussian',gaussian)
         ret, binary = cv2.threshold(gaussian, 0, 255, cv2.THRESH_OTSU)
         # cv2.imshow('binary', binary2)
-        kernel = np.ones((self.kernel,self.kernel), np.uint8)
+        kernel = np.ones((self.kernel_size[self.kernel],self.kernel_size[self.kernel]), np.uint8)
         erode = cv2.erode(binary , kernel, iterations =  self.e1)
         dilate = cv2.dilate(erode, kernel, iterations = self.d1) 
         erode2 = cv2.erode(dilate , kernel, iterations = self.e2)
@@ -944,9 +944,9 @@ class imageprocessing:
             self.v_l = cv2.getTrackbarPos('Val Min', 'line_follower')
             self.v_h = cv2.getTrackbarPos('Val Max', 'line_follower')
             self.area_line_follower = cv2.getTrackbarPos('Area Min', 'line_follower')
-            self.mid_k = self.kernel_size[cv2.getTrackbarPos('Median', 'line_follower')]
-            self.Gaus_k = self.kernel_size[cv2.getTrackbarPos('Gaussian', 'line_follower')] 
-            self.kernel = self.kernel_size[cv2.getTrackbarPos('Kernel', 'line_follower')]
+            self.mid_k = cv2.getTrackbarPos('Median', 'line_follower')
+            self.Gaus_k = cv2.getTrackbarPos('Gaussian', 'line_follower')
+            self.kernel = cv2.getTrackbarPos('Kernel', 'line_follower')
             self.e1 = cv2.getTrackbarPos('Erode 1', 'line_follower')
             self.d1 = cv2.getTrackbarPos('Dilate 1', 'line_follower')
             self.e2 = cv2.getTrackbarPos('Erode 2', 'line_follower')
